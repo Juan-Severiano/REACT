@@ -4,9 +4,9 @@ const ConditionalRender = () => {
   const [x, setX] = useState(true);
   const [name, setName] = useState('Paulo');
 
-  const handleChangeX = () => {
-    setX(!x);
-  }
+    const handleChangeX = () => {
+      setX(!x);
+    }
 
   return (
     <div>
