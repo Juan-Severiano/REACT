@@ -1,16 +1,15 @@
 import './App.css'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import { useFetch } from './hooks/useFetch'
 
 const url = 'http://localhost:3000/products'
 
 function App() {
-  const [products, setProducts] = useState([])
-  const {data: items, httpConfig, error} = useFetch(url)
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
+  const {data: items, httpConfig, error} = useFetch(url);
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -28,26 +27,6 @@ function App() {
   const handleRemove = (id) => {
     httpConfig(id, 'DELETE')
   }
-
-/*
-  const [products, setProducts] = useState([])
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
-
-  useEffect(() => {
-    async function effectData() {
-      const res = await fetch(url)
-      const data = await res.json()
-      setProducts(data)
-    }
-    effectData()
-  }, [])
-
-  // HTTP - post
-  const handleSubmit = async (e) => {
-
-  }
-*/
 
   return (
     <>
