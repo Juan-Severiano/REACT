@@ -1,58 +1,81 @@
-import { useEffect, useState } from 'react'
-import './App.css';
+import './App.css'
 
-const url = 'http://localhost:3000/products';
+import { useState, useEffect } from 'react'
+
+import { useFetch } from './hooks/useFetch'
+
+const url = 'http://localhost:3000/products'
 
 function App() {
-  const [products, setProducts] = useState([]);
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState(0);
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(url);
-      const data = await response.json();
-      setProducts(data);
-    }
-    fetchData();
-  }, []);
+  const [products, setProducts] = useState([])
+  const {data: items, httpConfig, error} = useFetch(url)
+  const [name, setName] = useState('')
+  const [price, setPrice] = useState('')
 
   const handleSubmit = async (e) => {
-    const body = {
-      name: name,
-      price: price
+    e.preventDefault()
+
+    const product = {
+      name,
+      price,
     }
-    const res = e.preventDefault();
-    await fetch(url, {
-      method: 'POST',
-      body: body.json()
-    })
-    console.log(res)
+
+    httpConfig(product, 'POST')
+    setName('')
+    setPrice('')
   }
 
-  console.log(products)
+  const handleRemove = (id) => {
+    httpConfig(id, 'DELETE')
+  }
+
+/*
+  const [products, setProducts] = useState([])
+  const [name, setName] = useState('')
+  const [price, setPrice] = useState('')
+
+  useEffect(() => {
+    async function effectData() {
+      const res = await fetch(url)
+      const data = await res.json()
+      setProducts(data)
+    }
+    effectData()
+  }, [])
+
+  // HTTP - post
+  const handleSubmit = async (e) => {
+
+  }
+*/
 
   return (
     <>
-      <h1>Vite + React</h1>
+      <h1>lista de produtos</h1>
+      {error && <p>{ error }</p>}
+
+      <ul>
+        {items && items.map((product) => (
+          <li key={product.id}>
+            {product.name} - R${product.price}
+            <button type='button' onClick={() => handleRemove(product.id)}>Deletar</button>
+          </li>
+        ))}
+      </ul>
       <div>
+        <p>Adicionar produtos:</p>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="name">
-            <span>Name:</span>
-            <input type="text" name='name' placeholder='Digite seu name' onChange={e => setName(e.target.value)} value={name} />
+          <label >
+            nome: 
+            <input type="text" value={name} name='name' onChange={(e) => setName(e.target.value)} />
           </label>
           <label>
-            <span>Preço:</span>
-            <input type="number" name='price' placeholder='Digite seu e-mail' onChange={(e) => setPrice(e.target.value)} value={price} />
+            Preço: 
+            <input type="number" value={price} name='price' onChange={(e) => setPrice(e.target.value)} />
           </label>
-          <button type="submit">enviar</button>
+          <input type="submit" value="Criar" />
         </form>
       </div>
-      <ul>
-        {
-          products.map(product => <li key={product.id}>{product.name} - R$ {product.price}</li>)
-        }
-      </ul>
     </>
   )
 }
