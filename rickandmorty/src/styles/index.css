@@ -1,0 +1,11 @@
+.card {
+  display: flex!important;
+  flex-direction: row!important;
+  background-color: #3C3E44;
+  img {
+    max-width: 50%;
+  }
+}
+body {
+  background-color: #272B33;
+}
