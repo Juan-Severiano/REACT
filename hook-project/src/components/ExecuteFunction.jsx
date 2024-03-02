@@ -9,7 +9,7 @@ const ExecuteFunction = ({ myFunction }) => {
 }
 
 ExecuteFunction.propTypes = {
-  myFunction: func
+  myFunction: func  
 }
 
 export default ExecuteFunction

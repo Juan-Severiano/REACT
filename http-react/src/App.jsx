@@ -1,37 +1,52 @@
 import './App.css'
 
-import { useState } from 'react'
-
-import { useFetch } from './hooks/useFetch'
+import { useEffect, useState } from 'react'
+import axios from 'axios';
 
 const url = 'http://localhost:3000/products'
 
 function App() {
-  const {data: items, httpConfig, error} = useFetch(url);
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
+  const [items, setItems] = useState([]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    const product = {
-      name,
-      price,
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await axios.get(url);
+        console.log(response.data);
+        setItems(response.data);
+      } catch(error) {
+        alert('Error in the products request')
+        console.log(error);
+      }
     }
+    fetch()
+  }, []);
 
-    httpConfig(product, 'POST')
-    setName('')
-    setPrice('')
+  async function handleSubmit() {
+    try {
+      const response = await axios.post(url, { name, price });
+      console.log(response);
+    } catch (error) {
+      alert('Deu erro :)');
+      console.log(error);
+    }
   }
 
-  const handleRemove = (id) => {
-    httpConfig(id, 'DELETE')
+  const handleRemove = async (id) => {
+    try {
+      const response = await axios.delete(`${url}/${id}`)
+      console.log(response);
+    } catch (error) {
+      alert('Deu erro :)');
+      console.log(error);
+    }
   }
 
   return (
     <>
       <h1>lista de produtos</h1>
-      {error && <p>{ error }</p>}
 
       <ul>
         {items && items.map((product) => (

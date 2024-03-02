@@ -15,7 +15,7 @@ function App() {
     <Suspense fallback={<p>Pegando ae</p>}>
       {
         images && images.map((image) => (
-          <img src={image.url} key={image.id} alt={image.id} {... image } />
+          <img src={image.url} key={image.id} alt={image.id} {... image  } />
         ))
       }
     </Suspense>
